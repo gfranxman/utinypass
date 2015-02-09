@@ -9,8 +9,8 @@ def read(*paths):
 
 setup(
     name='utinypass',
-    version='0.1.0',
-    description='Parse and split PEM files painlessly.',
+    version='0.1.2',
+    description='UNOFFICIAL TinyPass utility library.',
     long_description=(read('README.rst') + '\n\n' +
                       read('HISTORY.rst') + '\n\n' +
                       read('AUTHORS.rst') + '\n\n' +
