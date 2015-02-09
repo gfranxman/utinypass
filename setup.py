@@ -13,7 +13,8 @@ setup(
     description='Parse and split PEM files painlessly.',
     long_description=(read('README.rst') + '\n\n' +
                       read('HISTORY.rst') + '\n\n' +
-                      read('AUTHORS.rst')),
+                      read('AUTHORS.rst') + '\n\n' +
+                      read(('TODO.rst')),
     url='http://github.com/gfranxman/utinypass/',
     license='MIT',
     author='Glenn Franxman',
