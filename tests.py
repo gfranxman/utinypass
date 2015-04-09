@@ -3,7 +3,7 @@
 '''
 import utinypass.crypto
 import json
-
+import utinypass.api
 
 def test_compute_checksum():
     keyvalresults = [
@@ -95,6 +95,48 @@ def test_tinypass_rjindael_cycle():
     print inp, "-->", data, "-->", outp
     assert inp == outp
 
+
+
+def test_api_grant_revoke():
+    appid =  'nocommit'
+    apitoken = 'nocommit'
+    privatekey = 'nocommit'
+
+    email = "nocommit@comcast.net"
+    uid = 'nocommit'
+    rid = 'RESOURCE_ANNUAL'
+
+    def extract_access_dict( d ):
+        r = {}
+        for grant in d['data']:
+            k = grant['resource']['rid']
+            a = grant['access_id']
+            r[k] = a
+        return r
+ 
+    api =  TinyPassApiClient(app_id=appid, api_token=apitoken, private_key=privatekey, sandbox=True )
+
+    # check email, uid
+    access_structure =  api.get_access_list( email=email, uid=uid ) 
+    print extract_access_dict( access_structure )
+
+    # grant something
+    api.grant_user_access( uid, rid )
+
+    # check access
+    access_structure =  api.get_access_list( email=email, uid=uid ) 
+    print extract_access_dict( access_structure )
+
+    # revoke something
+    accesses = extract_access_dict(access_structure)
+    print "Revoking", rid, accesses[rid]
+    api.revoke_user_access( accesses[rid] )
+
+    # check access
+    access_structure =  api.get_access_list( email=email, uid=uid ) 
+    print extract_access_dict( access_structure )
+
 if __name__ == '__main__':
     test_tinypass_rjindael_cycle()
+    test_api_grant_revoke()
 

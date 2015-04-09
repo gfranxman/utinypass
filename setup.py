@@ -9,7 +9,7 @@ def read(*paths):
 
 setup(
     name='utinypass',
-    version='0.1.2',
+    version='0.2.1',
     description='UNOFFICIAL TinyPass utility library.',
     long_description=(read('README.rst') + '\n\n' +
                       read('HISTORY.rst') + '\n\n' +
@@ -22,7 +22,9 @@ setup(
     py_modules=['utinypass'],
     include_package_data=True,
     packages=find_packages(exclude=['tests*']),
-    install_requires=['pprp',],
+    install_requires=['pprp',
+        'requests',
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

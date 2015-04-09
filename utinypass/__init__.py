@@ -7,7 +7,8 @@ Use like:
     encrypted = utinypass.crypt.b64encode( 'mykey', 'mydata' ) 
 
 '''
+from utinypass.client import TinyPassApiClient as api
 
-__all__ = [ 'crypto', ]
-__version__ = '0.1.0'
+__all__ = [ 'crypto', api]
+__version__ = '0.2.1'
 
