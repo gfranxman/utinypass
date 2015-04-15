@@ -74,7 +74,7 @@ class TinyPassApiClient(  object ):
         }
 
         # doit
-        r = requests.get( self.base_url + path, data = data )
+        r = requests.get( self.base_url + path, data=data )
 
         if r.status_code != 200:
             raise ValueError( path + ":" + r.reason )
@@ -131,4 +131,114 @@ class TinyPassApiClient(  object ):
 
         if r.status_code != 200:
             raise ValueError( path + ":" + r.reason ) 
+
+
+    def create_user( self, uid, email, first_name='', last_name='' ):
+        path = "/api/v3/publisher/user/create"
+
+        data = {
+            'api_token': self.api_token,
+            'aid': self.app_id,
+            'uid': uid,
+            'email': email,
+        }
+
+        if first_name:
+            data['first_name'] = first_name
+
+        if last_name:
+            data['last_name'] = last_name
+
+        r = requests.get( self.base_url + path, data=data )
+
+        if r.status_code != 200:
+            raise ValueError( path + ":" + r.reason ) 
+
+        res = json.loads( r.content )
+
+        if res.has_key( 'code' ):
+            if res['code'] in (403, 2001, 2000, 2002):
+                raise ValueError( path + ":" + res['message'] )
+            print res
+
+        return res['user']
+
+
+
+    def update_user( self, uid, email='', first_name='', last_name='' ):
+        path = "/api/v3/publisher/user/update"
+
+        data = {
+            'api_token': self.api_token,
+            'aid': self.app_id,
+            'uid': uid,
+        }
+
+        if email:
+            data['email'] = email
+
+        if first_name:
+            data['first_name'] = first_name
+
+        if last_name:
+            data['last_name'] = last_name
+
+        r = requests.get( self.base_url + path, data=data )
+
+        if r.status_code != 200:
+            raise ValueError( path + ":" + r.reason ) 
+
+        res = json.loads( r.content )
+
+        if res.has_key( 'code' ):
+            if res['code'] in (403, 2001, 2000, 2002):
+                raise ValueError( path + ":" + res['message'] )
+            print res
+
+        return res['user']
+
+
+
+    def get_user( self, uid, disabled=False ):
+        ''' given a uid, returns
+        {
+        first_name (string): User's first name,
+        image1 (string): User's profile image,
+        email (string): User's email address,
+        create_date (string): The creation date,
+        last_name (string): User's last name,
+        uid (string): User's UID
+        }
+
+        You can pass disabled=True if you'd like to get the user even if the user has been disabled.
+        '''
+        path = "/api/v3/publisher/user/get"
+
+        data = {
+            'api_token': self.api_token,
+            'aid': self.app_id,
+            'uid': uid,
+            'disabled': disabled,
+        }
+
+        r = requests.get( self.base_url + path, data=data )
+
+        if r.status_code == 2:
+            raise ValueError( path + ":" + r.reason )  # An Auth issue
+
+        if r.status_code == 2004:
+            return None # no user found
+
+        res = json.loads( r.content )
+
+        # great the error could be in the json
+        if res.has_key( 'code' ):
+            if res['code'] != 0:
+                # 403 == auth error, 2004 = not found, 2 = access denied
+                if res['code'] == 2:
+                    raise ValueError( path + ":" + res['message'] )  # An Auth issue
+                print res
+                return None
+
+        return res['user']
 

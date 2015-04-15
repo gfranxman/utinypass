@@ -5,3 +5,5 @@ Version History
 
 04-10-2015 - 0.2.1 - Adding an api client with access listing, granting and revoking.
 
+04-15-2015 - 0.2.2 - Adding get_user, create_user and update_user to the api client.
+

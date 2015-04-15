@@ -9,7 +9,7 @@ def read(*paths):
 
 setup(
     name='utinypass',
-    version='0.2.1',
+    version='0.2.2',
     description='UNOFFICIAL TinyPass utility library.',
     long_description=(read('README.rst') + '\n\n' +
                       read('HISTORY.rst') + '\n\n' +
